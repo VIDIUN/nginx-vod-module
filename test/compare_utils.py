@@ -3,7 +3,7 @@ import time
 
 INGORED_HEADERS = set([
 	'x-vod-me','x-vod-session',
-	'x-me', 'x-kaltura-session', 
+	'x-me', 'x-vidiun-session', 
 	'x-varnish', 
 ])
 

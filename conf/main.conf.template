@@ -1,7 +1,7 @@
-user  kaltura;
+user  vidiun;
 worker_processes  auto;
 
-error_log  @LOG_DIR@/kaltura_nginx_errors.log;
+error_log  @LOG_DIR@/vidiun_nginx_errors.log;
 
 pid		@PID_FILE_PATH@;
 

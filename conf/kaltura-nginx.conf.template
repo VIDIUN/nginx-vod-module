@@ -1,7 +1,7 @@
 include @NGINX_CONF_PATH@/main.conf;
 
 http {
-	upstream kalapi {
+	upstream vidapi {
 		server @WWW_HOST@;
 	}
 
@@ -9,7 +9,7 @@ http {
 
 	# vod mapped settings
 	vod_mode mapped;
-	vod_upstream_location /kalapi_proxy;
+	vod_upstream_location /vidapi_proxy;
 	vod_upstream_extra_args "pathOnly=1";
 	vod_mapping_cache mapping_cache 64m;
 

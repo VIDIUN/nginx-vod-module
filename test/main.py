@@ -806,12 +806,12 @@ class DumpUpstreamTestSuite(UpstreamTestSuite):
         
 class FallbackUpstreamTestSuite(DumpUpstreamTestSuite):
     def testLoopPreventionHeaderSent(self):
-        TcpServer(self.serverPort, lambda s: socketExpectHttpHeaderAndSend(s, 'X-Kaltura-Proxy: dumpApiRequest', getHttpResponse('abcde')))
+        TcpServer(self.serverPort, lambda s: socketExpectHttpHeaderAndSend(s, 'X-Vidiun-Proxy: dumpApiRequest', getHttpResponse('abcde')))
         request = urllib2.Request(getUniqueUrl(self.baseUrl, self.urlFile))
         assertEquals(urllib2.urlopen(request).read(), 'abcde')
 
     def testLoopPreventionHeaderReceived(self):
-        assertRequestFails(getUniqueUrl(self.baseUrl, self.urlFile), 404, headers={'X-Kaltura-Proxy': 'dumpApiRequest'})
+        assertRequestFails(getUniqueUrl(self.baseUrl, self.urlFile), 404, headers={'X-Vidiun-Proxy': 'dumpApiRequest'})
         self.logTracker.assertContains('proxy header exists')
 
 class FileServeTestSuite(TestSuite):
