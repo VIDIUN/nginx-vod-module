@@ -105,7 +105,7 @@ events {
 
 http {
 
-	upstream kalapi {
+	upstream vidapi {
 		server localhost;
 	}
 	
@@ -125,7 +125,7 @@ http {
 		
 		# common vod settings
 		vod_mode mapped;
-		vod_upstream_location /kalapi_proxy;
+		vod_upstream_location /vidapi_proxy;
 		vod_max_metadata_size 256m;
 		vod_ignore_edit_list on;
 		vod_max_mapping_response_size 64k;
@@ -136,9 +136,9 @@ http {
 		add_header 'Access-Control-Allow-Origin' '*';
 		
 		# internal location for vod subrequests
-		location ^~ /kalapi_proxy/ {
+		location ^~ /vidapi_proxy/ {
 			internal;
-			proxy_pass http://kalapi/segmenter_test_backend.php/loc/;
+			proxy_pass http://vidapi/segmenter_test_backend.php/loc/;
 			proxy_set_header Host $http_host;
 		}
 		

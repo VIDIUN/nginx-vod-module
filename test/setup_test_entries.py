@@ -1,5 +1,5 @@
-from KalturaClient import *
-from KalturaClient.Plugins.Core import *
+from VidiunClient import *
+from VidiunClient.Plugins.Core import *
 from mp4_utils import *
 import http_utils
 import logging
@@ -16,16 +16,16 @@ logging.basicConfig(level = logging.DEBUG,
                     format = '%(asctime)s %(levelname)s %(message)s',
                     stream = sys.stdout)
 
-# kaltura client functions
-class KalturaLogger(IKalturaLogger):
+# vidiun client functions
+class VidiunLogger(IVidiunLogger):
     def log(self, msg):
         #logging.info(msg)
         pass
 
 def GetConfig():
-    config = KalturaConfiguration(PARTNER_ID)
+    config = VidiunConfiguration(PARTNER_ID)
     config.serviceUrl = SERVICE_URL
-    config.setLogger(KalturaLogger())
+    config.setLogger(VidiunLogger())
     return config
 
 def atomExists(path):
@@ -101,10 +101,10 @@ inputData = file(TEMP_DOWNLOAD_PATH, 'rb').read()
 inputAtoms = parseAtoms(inputData, 0, len(inputData), '')
 
 # initialize the api client
-client = KalturaClient(GetConfig())
+client = VidiunClient(GetConfig())
 
-ks = client.generateSession(ADMIN_SECRET, USER_NAME, KalturaSessionType.ADMIN, PARTNER_ID, 86400, "")
-client.setKs(ks)
+vs = client.generateSession(ADMIN_SECRET, USER_NAME, VidiunSessionType.ADMIN, PARTNER_ID, 86400, "")
+client.setVs(vs)
 
 # get source only conversion profile
 sourceOnlyConvProfileId = None
@@ -317,16 +317,16 @@ if atomExists('moov.trak.mdia.minf.stbl.ctts'):
 
 def uploadTestEntry(refId, generator):
     print 'uploading %s' % refId
-    newEntry = client.media.add(entry=KalturaMediaEntry(name=refId, referenceId=refId, mediaType=KalturaMediaType.VIDEO, conversionProfileId=sourceOnlyConvProfileId))
-    uploadToken = client.uploadToken.add(uploadToken=KalturaUploadToken())
-    client.media.addContent(entryId=newEntry.id, resource=KalturaUploadedFileTokenResource(token=uploadToken.id))
+    newEntry = client.media.add(entry=VidiunMediaEntry(name=refId, referenceId=refId, mediaType=VidiunMediaType.VIDEO, conversionProfileId=sourceOnlyConvProfileId))
+    uploadToken = client.uploadToken.add(uploadToken=VidiunUploadToken())
+    client.media.addContent(entryId=newEntry.id, resource=VidiunUploadedFileTokenResource(token=uploadToken.id))
     client.uploadToken.upload(uploadTokenId=uploadToken.id, fileData=generator())
     return newEntry.id
     
 
 # get all existing entries
 referenceIds = ','.join(map(lambda x: REFERENCE_ID_PREFIX + x[0], TEST_CASES))
-listResult = client.media.list(filter=KalturaMediaEntryFilter(referenceIdIn=referenceIds), pager=KalturaFilterPager(pageSize=500))
+listResult = client.media.list(filter=VidiunMediaEntryFilter(referenceIdIn=referenceIds), pager=VidiunFilterPager(pageSize=500))
 refIdToEntryIdMap = dict(map(lambda x: (x.referenceId, x.id), listResult.objects))
 
 # upload missing entries
@@ -341,8 +341,8 @@ for refId, generator, tests in TEST_CASES:
 
 # print the test uris
 print 'result:'
-flavors = client.flavorAsset.list(filter=KalturaFlavorAssetFilter(flavorParamsIdEqual=0, entryIdIn=','.join(entryMap.keys())),
-                                  pager=KalturaFilterPager(pageSize=500)).objects
+flavors = client.flavorAsset.list(filter=VidiunFlavorAssetFilter(flavorParamsIdEqual=0, entryIdIn=','.join(entryMap.keys())),
+                                  pager=VidiunFilterPager(pageSize=500)).objects
 for flavor in flavors:
     refId, tests = entryMap[flavor.entryId]
     for uriPrefix, fileName, statusCode, message in tests:

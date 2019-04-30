@@ -41,7 +41,7 @@ function getRequestParams()
         return $params;
 }
 
-function getSourceClips($filePaths, $durations, $generateKfs)
+function getSourceClips($filePaths, $durations, $generateVfs)
 {
 	$result = array();
 	for ($i = 0; $i < count($filePaths); $i++)
@@ -51,7 +51,7 @@ function getSourceClips($filePaths, $durations, $generateKfs)
 			"path" => $filePaths[$i]
 		);
 		
-		if ($generateKfs)
+		if ($generateVfs)
 		{
 			$r = new Random();
 			$curPos = $r->num(0, 1000);

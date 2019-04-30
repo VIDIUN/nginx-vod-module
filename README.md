@@ -1,7 +1,7 @@
 # NGINX-based VOD Packager
-## nginx-vod-module [![Build Status](https://travis-ci.org/kaltura/nginx-vod-module.svg?branch=master)](https://travis-ci.org/kaltura/nginx-vod-module)
+## nginx-vod-module [![Build Status](https://travis-ci.org/vidiun/nginx-vod-module.svg?branch=master)](https://travis-ci.org/vidiun/nginx-vod-module)
 
-[Join the list of organizations using this video packager project](https://github.com/kaltura/nginx-vod-module/issues/730/).
+[Join the list of organizations using this video packager project](https://github.com/vidiun/nginx-vod-module/issues/730/).
 
 ### Features
 
@@ -89,7 +89,7 @@ during `configure` - if a package is missing, the respective feature will be dis
 The optional features are:
 1. Thumbnail capture & volume map - depend on ffmpeg (3.0 or newer)
 2. Audio filtering (for changing playback rate / gain) - depends on ffmpeg (3.0 or newer) and also on libfdk_aac.
-	Due to licensing issues, libfdk_aac is not built into kaltura ffmpeg packages
+	Due to licensing issues, libfdk_aac is not built into vidiun ffmpeg packages
 3. Encryption / decryption (DRM / HLS AES) - depends on openssl
 4. DFXP captions - depends on libxml2
 5. UTF-16 encoded SRT files - depends on iconv
@@ -122,29 +122,29 @@ Debug settings:
 
 #### RHEL/CentOS 6/7 RPM
 ```
-# rpm -ihv http://installrepo.kaltura.org/releases/kaltura-release.noarch.rpm
-# yum install kaltura-nginx
+# rpm -ihv http://installrepo.vidiun.org/releases/vidiun-release.noarch.rpm
+# yum install vidiun-nginx
 ```
 
 #### Debian/Ubuntu deb package
-*Ubuntu NOTE: before trying to install kaltura-nginx, you must also make sure the multiverse repo is enabled*
+*Ubuntu NOTE: before trying to install vidiun-nginx, you must also make sure the multiverse repo is enabled*
 
 For Debian Wheezy [7], Debian Jessie [8], Ubuntu 14.04 and 14.10, add this repo:
 ```
-# wget -O - http://installrepo.kaltura.org/repo/apt/debian/kaltura-deb.gpg.key|apt-key add -
-# echo "deb [arch=amd64] http://installrepo.kaltura.org/repo/apt/debian naos main" > /etc/apt/sources.list.d/kaltura.list
+# wget -O - http://installrepo.vidiun.org/repo/apt/debian/vidiun-deb.gpg.key|apt-key add -
+# echo "deb [arch=amd64] http://installrepo.vidiun.org/repo/apt/debian naos main" > /etc/apt/sources.list.d/vidiun.list
 ```
 
 For Ubuntu 16.04, 16.10 add this repo:
 ```
-# wget -O - http://installrepo.kaltura.org/repo/apt/xenial/kaltura-deb-256.gpg.key|apt-key add -
-# echo "deb [arch=amd64] http://installrepo.kaltura.org/repo/apt/xenial naos main" > /etc/apt/sources.list.d/kaltura.list
+# wget -O - http://installrepo.vidiun.org/repo/apt/xenial/vidiun-deb-256.gpg.key|apt-key add -
+# echo "deb [arch=amd64] http://installrepo.vidiun.org/repo/apt/xenial naos main" > /etc/apt/sources.list.d/vidiun.list
 ```
 
-Then install the kaltura-nginx package:
+Then install the vidiun-nginx package:
 ```
 # apt-get update
-# apt-get install kaltura-nginx
+# apt-get install vidiun-nginx
 ```
 
 
@@ -152,7 +152,7 @@ If you wish to make use of the following features:
 - Thumbnail capture
 - Playback rate change - 0.5x up to 2x
 
-You will also need to install the kaltura-ffmpeg (>= 3.1) package.
+You will also need to install the vidiun-ffmpeg (>= 3.1) package.
 
 ### URL structure
 
@@ -628,7 +628,7 @@ Media packaged by nginx-vod-module can be protected using CDN tokens, this works
 * The CDN validates the token, and if found to be valid, forwards the request to nginx-vod-module 
 	on the origin. 
 * The nginx server builds the manifest response and generates tokens for the segment URLs
-	contained inside it. The module https://github.com/kaltura/nginx-secure-token-module can
+	contained inside it. The module https://github.com/vidiun/nginx-secure-token-module can
 	be used to accomplish this task, it currently support Akamai tokens and CloudFront tokens.
 	See the readme of this module for more details.
 * The CDN validates the token on each segment that is requested.
@@ -656,7 +656,7 @@ scenarios).
 
 In addition, it is possible to build a token based solution (as detailed in the previous section) 
 without a CDN, by having the nginx server validate the token. 
-The module https://github.com/kaltura/nginx-akamai-token-validate-module can be used
+The module https://github.com/vidiun/nginx-akamai-token-validate-module can be used
 to validate Akamai tokens. Locations on which the module is enabled will return 403 unless the 
 request contains a valid Akamai token. See the readme of this module for more details.
 
@@ -664,7 +664,7 @@ request contains a valid Akamai token. See the readme of this module for more de
 
 As an alternative to tokenization, URL encryption can be used to prevent an attacker from being
 able to craft a playable URL. URL encryption can be implemented with 
-https://github.com/kaltura/nginx-secure-token-module, and is supported for HLS and DASH (with 
+https://github.com/vidiun/nginx-secure-token-module, and is supported for HLS and DASH (with 
 manifest format set to segmentlist). 
 
 In terms of security, the main advantage of CDN tokens over URL encryption is that CDN tokens
@@ -1007,7 +1007,7 @@ Sets an nginx location to which the request is forwarded after encountering a fi
 
 #### vod_proxy_header_name
 * **syntax**: `vod_proxy_header_name name`
-* **default**: `X-Kaltura-Proxy`
+* **default**: `X-Vidiun-Proxy`
 * **context**: `http`, `server`, `location`
 
 Sets the name of an HTTP header that is used to prevent fallback proxy loops (local/mapped modes only).
@@ -1743,7 +1743,7 @@ Note: Configuration directives that can accept variables are explicitly marked a
 
 	http {
 		upstream fallback {
-			server fallback.kaltura.com:80;
+			server fallback.vidiun.com:80;
 		}
 
 		server {
@@ -1790,18 +1790,18 @@ Note: Configuration directives that can accept variables are explicitly marked a
 #### Mapped configuration
 
 	http {
-		upstream kalapi {
-			server www.kaltura.com:80;
+		upstream vidapi {
+			server www.vidiun.com:80;
 		}
 
 		upstream fallback {
-			server fallback.kaltura.com:80;
+			server fallback.vidiun.com:80;
 		}
 
 		server {
 			# vod settings
 			vod_mode mapped;
-			vod_upstream_location /kalapi;
+			vod_upstream_location /vidapi;
 			vod_upstream_extra_args "pathOnly=1";
 			vod_fallback_upstream_location /fallback;
 			vod_last_modified 'Sun, 19 Nov 2000 08:52:00 GMT';
@@ -1829,9 +1829,9 @@ Note: Configuration directives that can accept variables are explicitly marked a
 				proxy_set_header Host $http_host;
 			}
 
-			location ^~ /kalapi/ {
+			location ^~ /vidapi/ {
 				internal;
-				proxy_pass http://kalapi/;
+				proxy_pass http://vidapi/;
 				proxy_set_header Host $http_host;
 			}
 
@@ -1922,14 +1922,14 @@ And use this stream URL - http://nginx-vod-server/hls/test.json/master.m3u8
 #### Remote configuration
 
 	http {
-		upstream kalapi {
-			server www.kaltura.com:80;
+		upstream vidapi {
+			server www.vidiun.com:80;
 		}
 
 		server {
 			# vod settings
 			vod_mode remote;
-			vod_upstream_location /kalapi;
+			vod_upstream_location /vidapi;
 			vod_last_modified 'Sun, 19 Nov 2000 08:52:00 GMT';
 			vod_last_modified_types *;
 
@@ -1941,9 +1941,9 @@ And use this stream URL - http://nginx-vod-server/hls/test.json/master.m3u8
 			gzip on;
 			gzip_types application/vnd.apple.mpegurl;
 			
-			location ^~ /kalapi/ {
+			location ^~ /vidapi/ {
 				internal;
-				proxy_pass http://kalapi/;
+				proxy_pass http://vidapi/;
 				proxy_set_header Host $http_host;
 			}
 
@@ -1963,4 +1963,4 @@ And use this stream URL - http://nginx-vod-server/hls/test.json/master.m3u8
 
 All code in this project is released under the [AGPLv3 license](http://www.gnu.org/licenses/agpl-3.0.html) unless a different license for a particular library is specified in the applicable library path. 
 
-Copyright © Kaltura Inc. All rights reserved.
+Copyright © Vidiun Inc. All rights reserved.

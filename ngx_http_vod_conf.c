@@ -260,7 +260,7 @@ ngx_http_vod_merge_loc_conf(ngx_conf_t *cf, void *parent, void *child)
 	}
 
 	ngx_conf_merge_str_value(conf->fallback_upstream_location, prev->fallback_upstream_location, "");
-	ngx_conf_merge_str_value(conf->proxy_header.key, prev->proxy_header.key, "X-Kaltura-Proxy");
+	ngx_conf_merge_str_value(conf->proxy_header.key, prev->proxy_header.key, "X-Vidiun-Proxy");
 	ngx_conf_merge_str_value(conf->proxy_header.value, prev->proxy_header.value, "dumpApiRequest");
 
 	ngx_conf_merge_value(conf->last_modified_time, prev->last_modified_time, -1);
